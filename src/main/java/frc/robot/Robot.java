@@ -4,11 +4,23 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.Publisher;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -22,9 +34,11 @@ public class Robot extends TimedRobot
   private        Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  XboxController driveController = new XboxController(1);
+  Pigeon2 roboGyro = new Pigeon2(1);
 
   private Timer disabledTimer;
-
+  AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
   public Robot()
   {
     instance = this;
@@ -39,8 +53,13 @@ public class Robot extends TimedRobot
    * This function is run when the robot is first started up and should be used for any initialization code.
    */
   @Override
-  public void robotInit()
-  {
+  public void robotInit() {  
+    UsbCamera camera0 = CameraServer.startAutomaticCapture(0);
+    UsbCamera camera1 = CameraServer.startAutomaticCapture(1);
+    
+    CameraServer.addCamera(camera0);
+    CameraServer.addCamera(camera1);
+  
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -100,7 +119,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    m_robotContainer.setMotorBrake(false);
+    m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -140,6 +159,11 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+    System.out.println(stringPot.get());
+
+    if (driveController.getYButtonPressed()){
+      roboGyro.reset();
+    }
   }
 
   @Override
