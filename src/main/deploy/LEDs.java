@@ -32,7 +32,7 @@ public class LEDs extends PeriodicRunnable {
     leds = new AddressableLED(5);
     ledBuff =
         new AddressableLEDBuffer(
-            280); // something around 280 length for full LED (only 85 on robot though)
+            85); // something around 280 length for full LED (only 85 on robot though)
     // TODO: what does that comment above mean?
     leds.setLength(ledBuff.getLength());
     leds.setData(ledBuff);
