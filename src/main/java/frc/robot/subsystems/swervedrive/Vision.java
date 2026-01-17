@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,6 +23,8 @@ import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Robot;
 import java.awt.Desktop;
 import java.util.ArrayList;
@@ -242,6 +245,15 @@ public class Vision
     return tag.map(pose3d -> PhotonUtils.getDistanceToPose(currentPose.get(), pose3d.toPose2d())).orElse(-1.0);
   }
 
+public static double getDistanceFromAprilTag(String limeLightName){
+  double limeHeight = Constants.Lime_Height;
+  double limeTargetHeight = Constants.Lime_Target_Height;
+  double limeMountAngle = Constants.Lime_Mount_Angle;
+  double tx = -LimelightHelpers.getTX(limeLightName);
+  double dH = limeTargetHeight - limeHeight;
+  double distance = dH/Math.tan(Math.toRadians(limeMountAngle+tx));
+  return distance;
+}
   /**
    * Get tracked target from a camera of AprilTagID
    *
