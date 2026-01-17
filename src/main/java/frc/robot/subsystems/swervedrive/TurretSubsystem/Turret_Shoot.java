@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems.swervedrive.TurretSubsystem;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +20,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Turret_Shoot {
-    TalonFX Shoot_Motor = new TalonFX(TURRET_SHOOT_MOTOR_ID); 
+    //TalonFX Shoot_Motor = new TalonFX(TURRET_SHOOT_MOTOR_ID); 
     
     public void setRPM(){
 
