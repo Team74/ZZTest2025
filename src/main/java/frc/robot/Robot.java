@@ -16,6 +16,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -158,10 +159,12 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-    System.out.println(stringPot.get());
+   // System.out.println(stringPot.get());
 
     if (driveController.getYButtonPressed()){
+      System.out.println(roboGyro.getYaw());
       roboGyro.reset();
+      System.out.println(roboGyro.getYaw());
     }
   }
 
