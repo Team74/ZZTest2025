@@ -39,9 +39,9 @@ public class LEDs extends PeriodicRunnable {
     leds.start();
 
     // TODO: Replace this with Enums
-    mode1 = false; // lights moving in a line mode
-    mode2 = false;
-    mode3 = false;
+    mode1 = true; // lights moving in a line mode
+    mode2 = true;
+    mode3 = true;
     x = 1;
 
     if (!solidColor) {
