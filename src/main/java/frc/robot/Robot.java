@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -32,16 +33,21 @@ public class Robot extends TimedRobot
 {
 
   private static Robot   instance;
-  private        Command m_autonomousCommand;
+  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
   XboxController driveController = new XboxController(0);
   Pigeon2 roboGyro = new Pigeon2(2);
+  TalonFX PrototypeMotor = new TalonFX(1); //Id is probably wrong
+
   private Timer disabledTimer;
   AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
+
   public Robot()
   {
     instance = this;
+
   }
 
   public static Robot getInstance()
@@ -165,6 +171,12 @@ public class Robot extends TimedRobot
       System.out.println(roboGyro.getYaw());
       roboGyro.reset();
       System.out.println(roboGyro.getYaw());
+    }
+
+   
+
+    if (driveController.getAButtonPressed()){
+      PrototypeMotor.set(0.75);
     }
   }
 
