@@ -6,13 +6,19 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.swervedrive.Vision;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
@@ -32,17 +38,26 @@ public class Robot extends TimedRobot
 {
 
   private static Robot   instance;
-  private        Command m_autonomousCommand;
+  private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
   XboxController driveController = new XboxController(0);
   Pigeon2 roboGyro = new Pigeon2(2);
+  TalonFX PrototypeMotor = new TalonFX(3); //Id is probably wrong
+  Joystick driveJoystick = new Joystick(1);
+
+
+  int prototypetargetRPS = 0;
+
   private Timer disabledTimer;
   AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
   LEDs leds = new LEDs();
+
   public Robot()
   {
     instance = this;
+
   }
 
   public static Robot getInstance()
@@ -60,7 +75,9 @@ public class Robot extends TimedRobot
     
     CameraServer.addCamera(camera0);
     CameraServer.addCamera(camera1);
-  
+
+
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -152,6 +169,15 @@ public class Robot extends TimedRobot
     {
       CommandScheduler.getInstance().cancelAll();
     }
+    // in init function, set slot 0 gains
+    var slot0Configs = new Slot0Configs();
+    slot0Configs.kS = 0.05; // Add 0.05 V output to overcome static friction
+    slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+    slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
+    slot0Configs.kI = 0.5; // An error of 1 rps increases output by 0.5 V each second
+    slot0Configs.kD = 0.01; // An acceleration of 1 rps/s results in 0.01 V output
+
+    PrototypeMotor.getConfigurator().apply(slot0Configs);
   }
 
   /**
@@ -164,11 +190,30 @@ public class Robot extends TimedRobot
 
    // System.out.println(stringPot.get());
 
-    if (driveController.getYButtonPressed()){
+    /*if (driveController.getYButtonPressed()){
       System.out.println(roboGyro.getYaw());
       roboGyro.reset();
       System.out.println(roboGyro.getYaw());
+    }*/
+
+    if (driveController.getRightTriggerAxis() > 0.2){
+      prototypetargetRPS = 10;
+    } else {
+      prototypetargetRPS = 0;
     }
+    
+
+    // create a velocity closed-loop request, voltage output, slot 0 configs
+    var request = new VelocityVoltage(0).withSlot(0);
+
+    // set velocity to target rps, add 0.5 V to overcome gravity
+    PrototypeMotor.setControl(request.withVelocity(prototypetargetRPS).withFeedForward(0.5));
+    //System.out.println(PrototypeMotor.getVelocity());
+
+    /*if (driveJoystick.getX() >.50){
+      System.out.println("yes");
+    }*/
+  
   }
 
   @Override
