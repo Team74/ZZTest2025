@@ -1,12 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.utils.PeriodicRunnable;
 import java.util.Random;
 
-public class LEDs extends PeriodicRunnable {
+public class LEDs  {
   final AddressableLED leds;
   final AddressableLEDBuffer ledBuff;
 
@@ -28,7 +27,6 @@ public class LEDs extends PeriodicRunnable {
   Color color = Color.kRed;
 
   public LEDs() {
-    super(); // Super call adds it to the registry, which calls the periodic method every tick
     leds = new AddressableLED(5);
     ledBuff =
         new AddressableLEDBuffer(
@@ -55,8 +53,7 @@ public class LEDs extends PeriodicRunnable {
     }
   }
 
-  @Override
-  public void periodic() {
+  public void SetColor() {
 
     if (!solidColor) {
       x = 85;

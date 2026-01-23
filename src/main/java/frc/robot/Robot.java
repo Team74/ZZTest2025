@@ -21,7 +21,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.Publisher;
-
+import frc.robot.LEDs;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -39,6 +39,7 @@ public class Robot extends TimedRobot
   Pigeon2 roboGyro = new Pigeon2(2);
   private Timer disabledTimer;
   AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
+  LEDs leds = new LEDs();
   public Robot()
   {
     instance = this;
@@ -159,6 +160,8 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+    leds.SetColor();
+
    // System.out.println(stringPot.get());
 
     if (driveController.getYButtonPressed()){
