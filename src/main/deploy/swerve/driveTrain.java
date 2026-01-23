@@ -8,6 +8,7 @@ import java.util.Date;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
@@ -61,7 +62,7 @@ public class driveTrain {
    SwerveDrivePoseEstimator odometry;
     //SwerveDriveOdometry odometry;
 
-    AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+    Pigeon2 gyro = new Pigeon2(2);
     Dashboard dashboard;
 
     TalonFX liftMotor = null;
@@ -186,7 +187,7 @@ public class driveTrain {
   
         kinematics = new SwerveDriveKinematics(frontRight, frontLeft, backRight, backLeft);
 
-        odometry = new SwerveDrivePoseEstimator (kinematics, Rotation2d.fromDegrees(gyro.getYaw()), 
+        odometry = new SwerveDrivePoseEstimator (kinematics, Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()), 
             new SwerveModulePosition[]{
                 rightFront.getOdometryPosition(),
                 leftFront.getOdometryPosition(),
@@ -263,7 +264,7 @@ public class driveTrain {
         gyro.reset();
     }
     double getGyro() {
-        return (gyro.getAngle() % 360);
+        return (gyro.getYaw().getValueAsDouble() % 360);
     }
     void gyroOffset(double offset) {
         gyro.setAngleAdjustment(offset);
@@ -291,7 +292,7 @@ public class driveTrain {
        updaterobotorientation1();
 
         var pose = odometry.update(
-            Rotation2d.fromDegrees(gyro.getYaw()*-1),
+            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()*-1),
             new SwerveModulePosition[] {
                 rightFront.getOdometryPosition(),
                 leftFront.getOdometryPosition(),
@@ -375,7 +376,7 @@ public class driveTrain {
         drive(0, 0, 0, false, false);
     }
     double getTurnBotToAngle(double targetAngle){
-        double currentAngle = gyro.getYaw();
+        double currentAngle = gyro.getYaw().getValueAsDouble();
         
         double rotationVal = pidFastTurn.calculate(currentAngle,targetAngle);
 
