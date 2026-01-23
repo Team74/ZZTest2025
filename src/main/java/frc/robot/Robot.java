@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,7 +40,8 @@ public class Robot extends TimedRobot
 
   XboxController driveController = new XboxController(0);
   Pigeon2 roboGyro = new Pigeon2(2);
-  TalonFX PrototypeMotor = new TalonFX(1); //Id is probably wrong
+  TalonFX PrototypeMotor = new TalonFX(3); //Id is probably wrong
+  Joystick driveJoystick = new Joystick(1);
 
   private Timer disabledTimer;
   AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
@@ -167,17 +169,25 @@ public class Robot extends TimedRobot
   {
    // System.out.println(stringPot.get());
 
-    if (driveController.getYButtonPressed()){
+    /*if (driveController.getYButtonPressed()){
       System.out.println(roboGyro.getYaw());
       roboGyro.reset();
       System.out.println(roboGyro.getYaw());
+    }*/
+  
+    //PrototypeMotor.setVoltage(0);
+    if (driveController.getAButton()){
+     PrototypeMotor.setVoltage(12);
+    } else {
+      //PrototypeMotor.setVoltage(0);
     }
 
-   
+  
 
-    if (driveController.getAButtonPressed()){
-      PrototypeMotor.set(0.75);
+    if (driveJoystick.getX() >.50){
+      System.out.println("yes");
     }
+  
   }
 
   @Override
