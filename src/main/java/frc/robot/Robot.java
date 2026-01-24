@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.swervedrive.Vision;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -169,6 +171,20 @@ public class Robot extends TimedRobot
     {
       CommandScheduler.getInstance().cancelAll();
     }
+
+    TalonFXConfiguration toConfigure = new TalonFXConfiguration();
+    CurrentLimitsConfigs m_currentLimits = new CurrentLimitsConfigs();
+
+    m_currentLimits.SupplyCurrentLimit = 40; // Limit to 1 amps
+    m_currentLimits.SupplyCurrentLimitEnable = true; // And enable it
+    m_currentLimits.StatorCurrentLimit = 40; // Limit stator to 20 amps
+    m_currentLimits.StatorCurrentLimitEnable = true; // And enable it
+
+    toConfigure.CurrentLimits = m_currentLimits;
+
+    PrototypeMotor.getConfigurator().apply(toConfigure);
+    PrototypeMotor.setNeutralMode(NeutralModeValue.Brake);
+
     // in init function, set slot 0 gains
     var slot0Configs = new Slot0Configs();
     slot0Configs.kS = 0.05; // Add 0.05 V output to overcome static friction
@@ -197,7 +213,7 @@ public class Robot extends TimedRobot
     }*/
 
     if (driveController.getRightTriggerAxis() > 0.2){
-      prototypetargetRPS = 10;
+      prototypetargetRPS = -10000;
     } else {
       prototypetargetRPS = 0;
     }
