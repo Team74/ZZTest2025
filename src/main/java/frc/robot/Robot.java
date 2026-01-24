@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.swervedrive.Servo_motor;
 import frc.robot.subsystems.swervedrive.Vision;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -183,10 +184,13 @@ public class Robot extends TimedRobot
   /**
    * This function is called periodically during operator control.
    */
+  Servo_motor servomotor = new Servo_motor();
+
   @Override
   public void teleopPeriodic()
   {
     leds.SetColor();
+    servomotor.setting();
 
    // System.out.println(stringPot.get());
 
