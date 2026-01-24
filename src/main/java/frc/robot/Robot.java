@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.swervedrive.Servo_motor;
 import frc.robot.subsystems.swervedrive.Vision;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -31,6 +32,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.Publisher;
 import frc.robot.LEDs;
 
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
  * described in the TimedRobot documentation. If you change the name of this class or the package after creating this
@@ -92,6 +95,8 @@ public class Robot extends TimedRobot
     {
       DriverStation.silenceJoystickConnectionWarning(true);
     }
+
+    
   }
 
   /**
@@ -199,12 +204,20 @@ public class Robot extends TimedRobot
   /**
    * This function is called periodically during operator control.
    */
+  Servo_motor servomotor = new Servo_motor();
+
+ SparkMax intakeDeploy = new SparkMax(13, MotorType.kBrushless);
+  
+ TalonFX intakeMotor = new TalonFX(4); 
+
   @Override
   public void teleopPeriodic()
   {
     leds.SetColor();
+    servomotor.setting();
 
    // System.out.println(stringPot.get());
+
 
     /*if (driveController.getYButtonPressed()){
       System.out.println(roboGyro.getYaw());
@@ -217,7 +230,7 @@ public class Robot extends TimedRobot
     } else {
       prototypetargetRPS = 0;
     }
-    
+     
 
     // create a velocity closed-loop request, voltage output, slot 0 configs
     var request = new VelocityVoltage(0).withSlot(0);
@@ -229,7 +242,22 @@ public class Robot extends TimedRobot
     /*if (driveJoystick.getX() >.50){
       System.out.println("yes");
     }*/
-  
+
+
+   if (driveController.getAButton() == true){
+    intakeDeploy.set(0.5);
+   } else {
+    intakeDeploy.set(0);
+   }
+
+   if (driveController.getBButton() == true){
+    intakeMotor.set(0.5);
+   } else {
+    intakeMotor.set(0);
+   }
+
+
+
   }
 
   @Override
