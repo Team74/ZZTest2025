@@ -52,7 +52,8 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
   AnalogPotentiometer stringPot = new AnalogPotentiometer(0);
-  LEDs leds = new LEDs();
+  LEDs leds = null;
+  
 
   public Robot()
   {
@@ -158,6 +159,10 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit()
   {
+    leds = new LEDs();
+    
+    
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -177,6 +182,8 @@ public class Robot extends TimedRobot
     slot0Configs.kI = 0.5; // An error of 1 rps increases output by 0.5 V each second
     slot0Configs.kD = 0.01; // An acceleration of 1 rps/s results in 0.01 V output
 
+    
+
     PrototypeMotor.getConfigurator().apply(slot0Configs);
   }
 
@@ -186,7 +193,9 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-    leds.SetColor();
+    if(leds != null) {
+      leds.Pattern();
+    }
 
    // System.out.println(stringPot.get());
 
@@ -197,7 +206,7 @@ public class Robot extends TimedRobot
     }*/
 
     if (driveController.getRightTriggerAxis() > 0.2){
-      prototypetargetRPS = 10;
+      prototypetargetRPS = 10000;
     } else {
       prototypetargetRPS = 0;
     }
