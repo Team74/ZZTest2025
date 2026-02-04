@@ -38,12 +38,12 @@ public class LEDs  {
   final Distance LED_spacing = Units.Meters.of(1/14);  // 14  led groups  per meter
   final LinearVelocity lin_vel = Units.MetersPerSecond.of(1);
   
-  // define a rainbow pattern that we can apply later
+  // defines a Rainbow pattern and a scrolling version
   Frequency pattern_Rainbow_Speed = Frequency.ofBaseUnits((.1), Units.Hertz);
   final LEDPattern pattern_Rainbow = LEDPattern.rainbow(255, 255);
   final LEDPattern pattern_Rainbow_Scroll = pattern_Rainbow.scrollAtRelativeSpeed(pattern_Rainbow_Speed);
 
-  // defines a Red-Blue Gradient and a scrolling version
+  // defines a Red-Blue Gradient pattern and a scrolling version
   Frequency pattern_Grad_Speed = Frequency.ofBaseUnits(1, Units.Hertz);
   final LEDPattern pattern_Grad = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kRed, Color.kBlue); 
   final LEDPattern pattern_Grad_scroll = pattern_Grad.scrollAtRelativeSpeed(pattern_Grad_Speed);
